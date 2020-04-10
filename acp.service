@@ -1,0 +1,13 @@
+[Unit]
+Description=Compress the picture which move to or create in the monitored directory.
+After=network.target
+
+[Service]
+User=root
+Group=root
+Type=simple
+ExecStart=/usr/local/sbin/wenjinyu/acp.sh 
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
