@@ -1,6 +1,6 @@
 ## 介绍
 
-ACP（Automatically compress pictures，自动压缩文件）是一个简单的脚本工具，可以监听特定文件夹，并对移入文件夹内的图片进行压缩，压缩后的文件覆盖源文件
+ACP（Automatically compress pictures，自动压缩文件）是一个简单的bash脚本工具，可以监听特定文件夹，并对移入文件夹内的图片进行压缩
 
 ## 依赖
 
@@ -20,6 +20,8 @@ cd acp
 chmod +x ./setup.sh
 ./setup.sh
 ```
+
+> **注意**：压缩后的文件将覆盖源文件
 
 卸载
 

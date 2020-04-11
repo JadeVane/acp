@@ -1,13 +1,13 @@
 #!/bin/bash
 
-_Root_need () {
+_RootNeed () {
     if [[ $EUID -ne 0 ]]; then
         echo "错误：请以管理员权限运行！" 1>&2
         exit 1
     fi
 }
 
-_Release_query () {
+_ReleaseQuery () {
 	source /etc/os-release
 	case $ID in
 	debian|ubuntu|devuan)
@@ -27,13 +27,13 @@ _Release_query () {
 }
 
 
-_Autoinstall_requirement () {
+_AutoInstallRequirement () {
 	read Pick
 	[[ -z $Pick ]] && Pick=yes
 	case $Pick in
 		Y|y|yes|YES|Yes)
 			echo -n "正在安装: $Requirement_need ..."
-			_Release_query
+			_ReleaseQuery
 			$Install_command install $Requirement_need -y 2>&1 1>/dev/null
 
 			if [[ $? == 0 ]]
@@ -49,20 +49,20 @@ _Autoinstall_requirement () {
 			;;
 		*)
 			echo -n "输入错误，请重新输入[Y/N]："
-			_Autoinstall_requirement
+			_AutoInstallRequirement
 	esac
 }
 		
 
-_Test_component () {
+_TestComponent () {
 	Requirement_need=""
 	[[ ! `command -v pngquant` ]]  && Requirement_need="$Requirement_need pngquant"
 	[[ ! `command -v inotifywait` ]]  && Requirement_need="$Requirement_need inotify-tools"
 	[[ ! `command -v jpegoptim` ]] && Requirement_need="$Requirement_need jpegoptim"
 	if [[ ! -z $Requirement_need ]]
 	then
-		echo -ne "检测到当前系统缺少以下依赖：\n    $Requirement_need\n\n是否执行自动安装[Y/N]? "
-		_Autoinstall_requirement
+		echo -ne "检测到当前系统缺少以下依赖： $Requirement_need\n\n是否执行自动安装[Y/N]? "
+		_AutoInstallRequirement
 	fi
 }
 
@@ -75,9 +75,9 @@ _Install () {
 		echo "请选择监听的文件夹。如果该文件夹不存在，将自动创建"
 	fi
 
-	echo -ne "请输入文件夹的绝对路径（默认为：/home/$Username/pictures/aa）："
+	echo -ne "请输入文件夹的绝对路径（默认为：/home/$Username/pictures/acp）："
 	read Monitor_dir
-	[[ -z $Monitor_dir ]] && Monitor_dir=/home/$Username/pictures/aa
+	[[ -z $Monitor_dir ]] && Monitor_dir=/home/$Username/pictures/acp
 	[[ ! -d $Monitor_dir ]] && sudo -u $Username mkdir -p $Monitor_dir
 
 	cp acp.service acp.service_tmp
@@ -106,14 +106,14 @@ _Uninstall () {
 }
 
 
-_Root_need
+_RootNeed
 
 ACP_Installed=false
 Username=$SUDO_USER
 
 if [[ -z $1 ]]
 then
-	_Test_component
+	_TestComponent
 	_Install
 elif [[ $1 == uninstall ]]; then
 	_Uninstall
