@@ -86,6 +86,7 @@ _Install () {
 
 	[[ ! -d /usr/local/sbin/wenjinyu ]] && mkdir -p /usr/local/sbin/wenjinyu
 	cp acp.sh /usr/local/sbin/wenjinyu/acp.sh
+	chmod +x /usr/local/sbin/wenjinyu/acp.sh
 	mv acp.service_tmp /etc/systemd/system/acp.service
 	[[ $ACP_Installed ]] && systemctl daemon-reload && systemctl restart acp || systemctl start acp
 	systemctl enable acp 2>/dev/null
